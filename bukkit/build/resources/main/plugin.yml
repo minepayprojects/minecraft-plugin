@@ -1,0 +1,12 @@
+name: Minepay-Bukkit
+version: 0.0.1-d3f61b from main (2025/04/30 00:51:53)
+main: com.minecraft.minepay.bukkit.BukkitCore
+description: "Minepay Bukkit Plugin (based on [core-*])"
+authors:
+  - ViniciuszXL
+website: https://minepay.com.br/
+commands:
+  minepay:
+    description: Comando do Minepay-Bukkit
+    permission: minepay.command
+    permission-message: Você não possui permissão para digitar este comando

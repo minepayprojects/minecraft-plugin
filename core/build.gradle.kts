@@ -16,7 +16,8 @@ dependencies {
 
     implementation("com.zaxxer:HikariCP:5.1.0")
     implementation("org.jetbrains:annotations:24.1.0")
-    implementation("com.googlecode.json-simple:json-simple:1.1.1")
+    implementation("com.google.zxing:core:3.4.1")
+    implementation("com.google.zxing:javase:3.4.1")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

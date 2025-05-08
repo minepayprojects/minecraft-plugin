@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/bukkit/Minepay.bukkit.main.iml" filepath="$PROJECT_DIR$/.idea/modules/bukkit/Minepay.bukkit.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bukkit/Minepay.bukkit.test.iml" filepath="$PROJECT_DIR$/.idea/modules/bukkit/Minepay.bukkit.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/Minepay.core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/core/Minepay.core.main.iml" />
     </modules>
   </component>
 </project>
