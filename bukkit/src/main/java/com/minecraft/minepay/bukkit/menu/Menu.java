@@ -69,7 +69,7 @@ public abstract class Menu {
             setItem(slot, itemStack);
 
             if (slot % 9 == 6) {
-                slot += 4;
+                slot += 5;
                 continue;
             }
 

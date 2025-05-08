@@ -57,11 +57,16 @@ public class AccountListener implements Listener {
             return;
         }
 
+        if (itemStack.getType().equals(Material.MAP) && itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName() && itemStack.getItemMeta().getDisplayName().equalsIgnoreCase(MapCreator.getMapName())) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (!getInstance().getBukkitConfiguration().isDebug()) {
             return;
         }
 
-        if (event.getItem().getType().equals(Material.DIAMOND)) {
+        if (itemStack.getType().equals(Material.DIAMOND)) {
             Menu.open(player, new StoresMenu());
         }
     }
@@ -108,7 +113,7 @@ public class AccountListener implements Listener {
 
         if (storeData.getGateways().stream().anyMatch(gatewayData -> gatewayData.getName().startsWith("CentralCart"))) {
 
-            if (event.getCoupon() == null) {
+            if (event.getCoupon() == null && !event.isNoCoupon()) {
                 player.sendMessage("========================================");
                 player.sendMessage(ColorUtil.WHITE + "Possui " + ColorUtil.GREEN + "cupom" + ColorUtil.WHITE + " de desconto para efetuar a compra?");
                 player.sendMessage(ColorUtil.WHITE + "Se sim, é só digitar o cupom para ser aplicado a sua compra.");
@@ -197,6 +202,8 @@ public class AccountListener implements Listener {
 
         if (message != null) {
             playerBuyProductEvent.setCoupon(message);
+        } else {
+            playerBuyProductEvent.setNoCoupon(true);
         }
 
         return playerBuyProductEvent;

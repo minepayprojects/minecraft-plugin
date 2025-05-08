@@ -28,6 +28,8 @@ public class PlayerBuyProductEvent extends ServerEvent implements Cancellable {
 
     private String coupon;
 
+    private boolean noCoupon = false;
+
     private int hotbar = -1;
 
     private boolean cancelled;

@@ -1,19 +1,13 @@
 package com.minecraft.minepay.bukkit.menu.list;
 
-import com.minecraft.minepay.Core;
 import com.minecraft.minepay.account.Account;
-import com.minecraft.minepay.bukkit.event.inventory.InventoryShopCategoryMenuOpenEvent;
-import com.minecraft.minepay.bukkit.event.player.PlayerBuyProductEvent;
 import com.minecraft.minepay.bukkit.menu.Menu;
-import com.minecraft.minepay.bukkit.util.Util;
 import com.minecraft.minepay.bukkit.util.item.ItemBuilder;
-import com.minecraft.minepay.http.data.category.CategoryData;
-import com.minecraft.minepay.http.data.gateway.GatewayData;
-import com.minecraft.minepay.http.data.product.ProductData;
-import com.minecraft.minepay.http.data.shop.ShopData;
 import com.minecraft.minepay.http.data.store.StoreData;
+import com.minecraft.minepay.http.data.transaction.TransactionCreatedData;
 import com.minecraft.minepay.http.data.transaction.TransactionData;
 import com.minecraft.minepay.util.color.ColorUtil;
+import com.minecraft.minepay.util.time.TimeUtils;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -48,11 +42,23 @@ public class MyTransactionsMenu extends Menu {
             List<ItemStack> itemStacks = new ArrayList<>();
 
             for (TransactionData transaction : acc.getTransactions()) {
+                StringBuilder stringBuilder = new StringBuilder();
+
+                stringBuilder.append("Produto: ").append(ColorUtil.WHITE).append(transaction.getProductData().getName()).append(ColorUtil.GRAY).append("\n");
+                stringBuilder.append("Gateway: ").append(ColorUtil.WHITE).append(transaction.getGatewayData().getName()).append(ColorUtil.GRAY).append("\n");
+                stringBuilder.append("Criado em: ").append(ColorUtil.WHITE).append(TimeUtils.formatAPI(transaction.getCreatedAt())).append(ColorUtil.GRAY).append("\n");
+
+                if (transaction.getStatus().equalsIgnoreCase("Cancelado")) {
+                    stringBuilder.append("Expirado em: ").append(ColorUtil.WHITE).append(TimeUtils.formatAPI(transaction.getExpireAt())).append(ColorUtil.GRAY).append("\n");
+                }
+
+                stringBuilder.append("\n").append("Status: ").append(ColorUtil.WHITE).append(transaction.getStatus()).append(ColorUtil.GRAY).append("\n");
+
+                stringBuilder.append("Status detalhado: ").append(ColorUtil.WHITE).append(transaction.getStatusDetail()).append(ColorUtil.GRAY);
+
                 ItemStack builder = new ItemBuilder(Material.PAPER)
                         .name(ColorUtil.GREEN + "Transação #" + transaction.getId())
-                        .lore("Produto: " + ColorUtil.WHITE + transaction.getProductData().getName() + ColorUtil.GRAY +
-                                "\nGateway: " + ColorUtil.WHITE + transaction.getGatewayData().getName() + ColorUtil.GRAY +
-                                "\n\nStatus: " + ColorUtil.WHITE + transaction.getStatus())
+                        .lore(stringBuilder.toString())
                         .build();
 
                 itemStacks.add(builder);
@@ -67,6 +73,9 @@ public class MyTransactionsMenu extends Menu {
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
+
+        Account account = Account.getAccount(player.getUniqueId());
+
         int slot = event.getRawSlot();
 
         ItemStack itemStack = getInventoryApi().getItems().get(slot);
@@ -78,8 +87,24 @@ public class MyTransactionsMenu extends Menu {
         player.playSound(player, Sound.UI_BUTTON_CLICK, 1.0f, 2.0f);
 
         if (hasDisplayName(itemStack, ColorUtil.RED + "<-- Voltar")) {
-            Menu.open(player, new StoresMenu());
+            Menu.open(player, new ShopMenu(getStoreData()));
             return;
+        }
+
+        String itemName = ChatColor.stripColor(itemStack.getItemMeta().getDisplayName());
+
+        int id = Integer.parseInt(itemName.split("#")[1]);
+
+        TransactionData transaction = account.getTransactions().stream().filter(transactionData -> transactionData.getId() == id).findFirst().orElse(null);
+
+        if (transaction == null) {
+            return;
+        }
+
+        if (transaction.getStatus().equalsIgnoreCase("Aguardando pagamento")) {
+            player.closeInventory();
+
+            account.getExecutor().sendTransactionCreated(new TransactionCreatedData(transaction.getQrCode(), transaction.getQrCodeBase64(), transaction.getTicketUrl()));
         }
     }
 }

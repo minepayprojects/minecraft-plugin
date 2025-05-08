@@ -1,6 +1,6 @@
 package com.minecraft.minepay.account;
 
-import com.minecraft.minepay.http.data.transaction.TransactionCreateData;
+import com.minecraft.minepay.http.data.transaction.TransactionCreatedData;
 import com.minecraft.minepay.http.data.transaction.TransactionData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public abstract class AccountExecutor {
 
     public abstract void sendMessage(String message);
 
-    public abstract void sendTransactionCreated(TransactionCreateData transaction);
+    public abstract void sendTransactionCreated(TransactionCreatedData transaction);
 
     public abstract void sendTransaction(TransactionData transaction);
 }

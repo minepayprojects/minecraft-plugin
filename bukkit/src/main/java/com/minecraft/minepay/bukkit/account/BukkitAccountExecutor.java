@@ -10,7 +10,7 @@ import com.minecraft.minepay.bukkit.util.image.ImageCreator;
 import com.minecraft.minepay.bukkit.util.map.MapCreator;
 import com.minecraft.minepay.http.body.HttpBody;
 import com.minecraft.minepay.http.data.product.ProductData;
-import com.minecraft.minepay.http.data.transaction.TransactionCreateData;
+import com.minecraft.minepay.http.data.transaction.TransactionCreatedData;
 import com.minecraft.minepay.http.data.transaction.TransactionData;
 import com.minecraft.minepay.transaction.TransactionHandler;
 import com.minecraft.minepay.util.color.ColorUtil;
@@ -36,7 +36,7 @@ public class BukkitAccountExecutor extends AccountExecutor {
     }
 
     @Override
-    public void sendTransactionCreated(TransactionCreateData transaction) {
+    public void sendTransactionCreated(TransactionCreatedData transaction) {
         Runnable runnable = () -> {
             Player player = Bukkit.getPlayer(getUniqueId());
             if (player == null) {
@@ -66,7 +66,7 @@ public class BukkitAccountExecutor extends AccountExecutor {
                 return;
             }
 
-            player.sendMessage(ColorUtil.GREEN + "Você possui 15 minutos para efetuar o pagamento do produto.");
+            player.sendMessage(ColorUtil.GREEN + "Pague o QR Code antes que a transação seja cancelada por falta de pagamento");
 
             ImageCreator imageCreator = ImageCreator.builder().data(transaction.getQrCodeBase64()).build();
 
@@ -83,10 +83,6 @@ public class BukkitAccountExecutor extends AccountExecutor {
             Account account = Account.getAccount(getUniqueId());
 
             ProductData product = transaction.getProductData();
-
-            if (transaction.getStatus().equalsIgnoreCase("Cancelado")) {
-                account.getExecutor().sendMessage(ColorUtil.RED + "A transação #" + transaction.getId() + " foi cancelada por falta de pagamento");
-            }
 
             if (transaction.isPaid()) {
 

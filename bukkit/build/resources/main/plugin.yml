@@ -1,5 +1,5 @@
 name: Minepay-Bukkit
-version: 0.0.1-5fbd80 from main (2025/05/08 01:07:45)
+version: 0.0.1-2c6305 from main (2025/05/08 10:15:13)
 main: com.minecraft.minepay.bukkit.BukkitCore
 description: "Minepay Bukkit Plugin (based on [core-*])"
 authors:

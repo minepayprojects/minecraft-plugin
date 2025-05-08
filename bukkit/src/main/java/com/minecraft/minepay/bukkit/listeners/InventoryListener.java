@@ -4,13 +4,16 @@ import com.minecraft.minepay.Core;
 import com.minecraft.minepay.account.Account;
 import com.minecraft.minepay.bukkit.BukkitCore;
 import com.minecraft.minepay.bukkit.menu.Menu;
+import com.minecraft.minepay.bukkit.util.map.MapCreator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.ItemStack;
 
 @RequiredArgsConstructor
 @Getter
@@ -25,6 +28,16 @@ public class InventoryListener implements Listener {
         }
 
         Player player = (Player) event.getWhoClicked();
+
+        if (event.getCurrentItem() != null) {
+
+            ItemStack itemStack = event.getCurrentItem();
+            if (itemStack.getType().equals(Material.MAP) && itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName() && itemStack.getItemMeta().getDisplayName().equalsIgnoreCase(MapCreator.getMapName())) {
+                event.setCancelled(true);
+
+                player.updateInventory();
+            }
+        }
 
         Menu menu = getInstance().getMenuController().getMenus().get(player.getUniqueId());
 

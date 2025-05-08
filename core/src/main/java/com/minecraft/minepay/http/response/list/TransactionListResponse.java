@@ -36,30 +36,51 @@ public class TransactionListResponse extends HttpResponse {
 
             JsonObject object = request.getJsonObject();
 
-            setPage(object.get("page").getAsInt());
-            setLimit(object.get("limit").getAsInt());
-            setTotal(object.get("total").getAsInt());
-            setTotalPage(object.get("totalPage").getAsInt());
+            setObject(object);
 
-            JsonArray data = object.get("data").getAsJsonArray();
+            setPage(getInt("page"));
+            setLimit(getInt("limit"));
+            setTotal(getInt("total"));
+            setTotalPage(getInt("totalPage"));
+
+            JsonArray data = getJsonArray("data");
 
             for (int i = 0; i < data.size(); i++) {
-                object = data.get(i).getAsJsonObject();
+                setObject(data.get(i).getAsJsonObject());
 
-                TransactionData transaction = Core.GSON.fromJson(object, TransactionData.class);
+                int id = getInt("id");
+                String uniqueId = getString("uniqueId");
+                String username = getString("username");
+                String transactionId = getString("transactionId");
+                boolean delivered = getBoolean("delivered");
+                boolean paid = getBoolean("paid");
+                boolean refunded = getBoolean("refunded");
+                boolean productRefunded = getBoolean("productRefunded");
+                String status = getString("status");
+                String statusDetail = getString("statusDetail");
+                String expireAt = getString("expireAt");
+                String createdAt = getString("createdAt");
+                String updatedAt = getString("updatedAt");
+                String deletedAt = getString("deletedAt");
 
-                transaction.setStoreData(Core.GSON.fromJson(object.get("store").getAsJsonObject(), StoreData.class));
-                transaction.setProductData(Core.GSON.fromJson(object.get("product").getAsJsonObject(), ProductData.class));
-                transaction.setGatewayData(Core.GSON.fromJson(object.get("gateway").getAsJsonObject(), GatewayData.class));
+                TransactionData transaction = new TransactionData(id, uniqueId, username, transactionId, delivered, paid, refunded, productRefunded, status, statusDetail, expireAt, createdAt, updatedAt, deletedAt);
 
-                if (transaction.getStatus().equalsIgnoreCase("Aguardando pagamento")) {
-                    object = object.get("online").getAsJsonObject()
-                            .get("point_of_interaction").getAsJsonObject()
-                            .get("transaction_data").getAsJsonObject();
+                if (!isJsonNull("details")) {
+                    transaction.setDetails(getJsonObject("details"));
+                }
 
-                    transaction.setQrCode(object.get("qr_code").getAsString());
-                    transaction.setQrCodeBase64(object.get("qr_code_base64").getAsString());
-                    transaction.setTicketUrl(object.get("ticket_url").getAsString());
+                transaction.setStoreData(Core.GSON.fromJson(getJsonObject("store"), StoreData.class));
+                transaction.setProductData(Core.GSON.fromJson(getJsonObject("product"), ProductData.class));
+                transaction.setGatewayData(Core.GSON.fromJson(getJsonObject("gateway"), GatewayData.class));
+
+                if (transaction.getStatus().equalsIgnoreCase("Aguardando pagamento") && !isJsonNull("online")) {
+                    setObject(getJsonObject("online"));
+                    setObject(getJsonObject("point_of_interaction"));
+                    setObject(getJsonObject("transaction_data"));
+
+                    transaction.setQrCode(getString("qr_code"));
+                    transaction.setQrCodeBase64(getString("qr_code_base64"));
+                    transaction.setTicketUrl(getString("ticket_url"));
                 }
 
                 getTransactions().add(transaction);
