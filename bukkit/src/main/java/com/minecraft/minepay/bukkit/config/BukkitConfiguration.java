@@ -14,8 +14,10 @@ public class BukkitConfiguration {
 
     private final int fetchStoresTimer;
 
+    private final boolean debug;
+
     public static BukkitConfiguration load(File file) {
-        BukkitConfiguration configuration = new BukkitConfiguration(6000);
+        BukkitConfiguration configuration = new BukkitConfiguration(6000, false);
 
         try {
             if (file.exists()) {

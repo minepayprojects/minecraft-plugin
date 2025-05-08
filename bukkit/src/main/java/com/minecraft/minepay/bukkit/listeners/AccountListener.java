@@ -43,24 +43,28 @@ public class AccountListener implements Listener {
 
         Core.getAccountController().register(uniqueId, account);
     }
-//
-//    @EventHandler
-//    public void onInteract(PlayerInteractEvent event) {
-//        if (event.getAction() == Action.PHYSICAL) {
-//            return;
-//        }
-//
-//        Player player = event.getPlayer();
-//
-//        ItemStack itemStack = event.getItem();
-//        if (itemStack == null) {
-//            return;
-//        }
-//
-//        if (event.getItem().getType().equals(Material.DIAMOND)) {
-//            Menu.open(player, new StoresMenu());
-//        }
-//    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.getAction() == Action.PHYSICAL) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+
+        ItemStack itemStack = event.getItem();
+        if (itemStack == null) {
+            return;
+        }
+
+        if (!getInstance().getBukkitConfiguration().isDebug()) {
+            return;
+        }
+
+        if (event.getItem().getType().equals(Material.DIAMOND)) {
+            Menu.open(player, new StoresMenu());
+        }
+    }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
@@ -108,6 +112,7 @@ public class AccountListener implements Listener {
                 player.sendMessage("========================================");
                 player.sendMessage(ColorUtil.WHITE + "Possui " + ColorUtil.GREEN + "cupom" + ColorUtil.WHITE + " de desconto para efetuar a compra?");
                 player.sendMessage(ColorUtil.WHITE + "Se sim, é só digitar o cupom para ser aplicado a sua compra.");
+                player.sendMessage(ColorUtil.WHITE + "Caso não possua, é só digitar " + ColorUtil.RED + "não" + ColorUtil.WHITE + " para prosseguir com a compra.");
                 player.sendMessage("========================================");
 
                 getInstance().getCouponSelect().add(player.getUniqueId());
@@ -170,13 +175,13 @@ public class AccountListener implements Listener {
             return;
         }
 
-       getInstance().getCouponSelect().remove(player.getUniqueId());
+        getInstance().getCouponSelect().remove(player.getUniqueId());
 
-       PlayerBuyProductEvent cache = getInstance().getEventBuy().get(player.getUniqueId());
+        PlayerBuyProductEvent cache = getInstance().getEventBuy().get(player.getUniqueId());
 
-       PlayerBuyProductEvent playerBuyProductEvent = getPlayerBuyProductEvent(player, cache, message);
+        PlayerBuyProductEvent playerBuyProductEvent = getPlayerBuyProductEvent(player, cache, message.equalsIgnoreCase("não") ? null : message);
 
-       playerBuyProductEvent.call();
+        playerBuyProductEvent.call();
     }
 
     private static @NotNull PlayerBuyProductEvent getPlayerBuyProductEvent(Player player, PlayerBuyProductEvent cache, String message) {
@@ -188,8 +193,11 @@ public class AccountListener implements Listener {
         playerBuyProductEvent.setProductId(cache.getProductId());
         playerBuyProductEvent.setGatewayId(cache.getGatewayId());
         playerBuyProductEvent.setAddress(cache.getAddress());
-        playerBuyProductEvent.setCoupon(message);
         playerBuyProductEvent.setHotbar(cache.getHotbar());
+
+        if (message != null) {
+            playerBuyProductEvent.setCoupon(message);
+        }
 
         return playerBuyProductEvent;
     }

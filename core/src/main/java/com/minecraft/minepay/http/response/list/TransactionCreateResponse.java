@@ -25,6 +25,8 @@ public class TransactionCreateResponse extends HttpResponse {
 
     @Override
     public TransactionCreateResponse parse(HttpRequest request) {
+        Core.getLogger().log("%s: %s", request.isSuccess(), !request.isSuccess() ? request.getErrorMessage() : request.getMessage());
+
         setSuccess(request.isSuccess());
         setMessage(!request.isSuccess() ? request.getErrorMessage() : request.getMessage());
 

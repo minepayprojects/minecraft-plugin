@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Getter
@@ -39,12 +40,12 @@ public class StoreListResponse extends HttpResponse {
 
                 StoreData store = Core.GSON.fromJson(object, StoreData.class);
 
-                store.setGateways(new ArrayList<>());
+                store.setGateways(new HashSet<>());
 
                 JsonArray gateways = object.get("gateways").getAsJsonArray();
 
                 for (int y = 0; y < gateways.size(); y++) {
-                    object = gateways.get(i).getAsJsonObject();
+                    object = gateways.get(y).getAsJsonObject();
 
                     GatewayData gatewayData = Core.GSON.fromJson(object.get("gateway").getAsJsonObject(), GatewayData.class);
 

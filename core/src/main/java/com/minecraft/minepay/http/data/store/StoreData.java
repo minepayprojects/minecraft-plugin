@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class StoreData {
@@ -17,7 +18,7 @@ public class StoreData {
 
     private final String createdAt, updatedAt, deletedAt;
 
-    private List<GatewayData> gateways;
+    private Set<GatewayData> gateways;
 
     public GatewayData getGatewayByName(String name) {
         return getGateways().stream().filter(gatewayData -> gatewayData.getName().equalsIgnoreCase(name)).findFirst().orElse(null);

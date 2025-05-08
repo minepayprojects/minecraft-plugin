@@ -103,7 +103,9 @@ public class HttpRequest {
                 setJsonObject(jsonObject);
 
                 if (!success) {
-                    throw new Error(message);
+                    setResult(HttpResult.ERROR);
+                    setErrorMessage(message);
+                    return this;
                 }
 
                 setMessage(message);
@@ -127,8 +129,6 @@ public class HttpRequest {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-
             setResult(HttpResult.ERROR);
             setErrorMessage(e.getMessage());
         } finally {

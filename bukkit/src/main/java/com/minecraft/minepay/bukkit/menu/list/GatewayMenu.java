@@ -46,20 +46,17 @@ public class GatewayMenu extends Menu {
 
     @Override
     public void buildInventory(Player player) {
-
-        int size = getStoreData().getGateways().size();
-
-        int slot = size == 3 ? 11 : size == 2 ? 12 : 13;
-
-        int slotAdd = size > 1 ? 1 : 0;
+        int slot = 10;
 
         for (GatewayData gateway : getStoreData().getGateways()) {
+            if (!gateway.isBank()) {
+                continue;
+            }
+
             ItemBuilder builder = new ItemBuilder(Util.findItemStackByMaterialName(gateway.getName()))
                     .name(ColorUtil.GREEN + gateway.getName());
 
-            setItem(slot, builder.build());
-
-            slot += slotAdd;
+            setItem(slot+=1, builder.build());
         }
 
         setItem(27, new ItemBuilder(Material.ARROW).name(ColorUtil.RED + "<-- Voltar").build());

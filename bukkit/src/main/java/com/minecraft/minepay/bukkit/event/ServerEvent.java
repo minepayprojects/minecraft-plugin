@@ -1,5 +1,6 @@
 package com.minecraft.minepay.bukkit.event;
 
+import com.minecraft.minepay.bukkit.BukkitCore;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -21,6 +22,15 @@ public class ServerEvent extends Event {
     }
 
     public void call() {
+        if (!Bukkit.isPrimaryThread()) {
+            Bukkit.getScheduler().runTask(BukkitCore.getInstance(), this::callServerEvent);
+            return;
+        }
+
+        callServerEvent();
+    }
+
+    private void callServerEvent() {
         Bukkit.getPluginManager().callEvent(this);
     }
 
