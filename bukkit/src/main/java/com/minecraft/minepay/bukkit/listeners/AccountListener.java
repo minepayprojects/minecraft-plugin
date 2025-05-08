@@ -43,24 +43,24 @@ public class AccountListener implements Listener {
 
         Core.getAccountController().register(uniqueId, account);
     }
-
-    @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        if (event.getAction() == Action.PHYSICAL) {
-            return;
-        }
-
-        Player player = event.getPlayer();
-
-        ItemStack itemStack = event.getItem();
-        if (itemStack == null) {
-            return;
-        }
-
-        if (event.getItem().getType().equals(Material.DIAMOND)) {
-            Menu.open(player, new StoresMenu());
-        }
-    }
+//
+//    @EventHandler
+//    public void onInteract(PlayerInteractEvent event) {
+//        if (event.getAction() == Action.PHYSICAL) {
+//            return;
+//        }
+//
+//        Player player = event.getPlayer();
+//
+//        ItemStack itemStack = event.getItem();
+//        if (itemStack == null) {
+//            return;
+//        }
+//
+//        if (event.getItem().getType().equals(Material.DIAMOND)) {
+//            Menu.open(player, new StoresMenu());
+//        }
+//    }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
