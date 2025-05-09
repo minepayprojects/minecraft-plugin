@@ -129,6 +129,8 @@ public class AccountListener implements Listener {
 
         player.sendMessage(ColorUtil.GREEN + "Criando sua transação, aguarde alguns segundos...");
 
+        event.setAddress(Util.getAddress(player));
+
         Account account = Account.getAccount(player.getUniqueId());
 
         if (event.getCoupon() != null) {

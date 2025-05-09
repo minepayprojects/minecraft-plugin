@@ -17,8 +17,6 @@ public class ItemBuilder {
     @Getter
     private ItemStack itemStack;
 
-    private List<ItemFlag> itemFlagList = new ArrayList<ItemFlag>();
-
     public ItemBuilder(ItemStack itemStack) {
         this.itemStack = itemStack;
     }

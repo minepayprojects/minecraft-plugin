@@ -72,6 +72,4 @@ public class InventoryApi {
     public void setItem(int slot, @NonNull ItemStack itemStack) {
         getItems().put(slot, itemStack);
     }
-
-
 }

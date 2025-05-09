@@ -11,7 +11,6 @@ import com.minecraft.minepay.http.data.shop.ShopData;
 import com.minecraft.minepay.http.data.store.StoreData;
 import com.minecraft.minepay.util.color.ColorUtil;
 import lombok.Getter;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -45,9 +44,7 @@ public class ConfirmBuyMenu extends Menu {
     public void buildInventory(Player player) {
 
         // Product
-        setItem(12, new ItemBuilder(Util.findItemStackByMaterialName(getProductData().getDisplay_ingame()))
-                .name(ColorUtil.GREEN + getProductData().getName())
-                .lore(getProductData().getDescription_ingame()).build());
+        setItem(12, getProductItem(getProductData()).build());
 
         // Gateway
         setItem(14, new ItemBuilder(Util.findItemStackByMaterialName(getGatewayData().getName()))

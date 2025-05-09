@@ -104,10 +104,10 @@ public class BukkitAccountExecutor extends AccountExecutor {
                     PlayerDeliveryProductEvent playerDeliveryProductEvent = new PlayerDeliveryProductEvent(account, product);
                     playerDeliveryProductEvent.call();
 
-                    if (!playerDeliveryProductEvent.isCancelled()) {
-                        account.getExecutor().sendMessage(ColorUtil.GREEN + "Pagamento confirmado com sucesso. Entregando seu produto...");
+                    account.getExecutor().sendMessage(ColorUtil.GREEN + "Pagamento confirmado com sucesso. Entregando seu produto...");
+                    Core.getLogger().log("Enviando o produto '%s' para o jogador '%s'(%s)", product.getName(), account.getUsername(), account.getUniqueId().toString());
 
-                        Core.getLogger().log("Enviando o produto '%s' para o jogador '%s'(%s)", product.getName(), account.getUsername(), account.getUniqueId().toString());
+                    if (!playerDeliveryProductEvent.isCancelled()) {
 
                         for (String command : product.getCommands()) {
                             command = command.replace("{playername}", account.getUsername());
@@ -119,11 +119,13 @@ public class BukkitAccountExecutor extends AccountExecutor {
 
                     TransactionHandler.getInstance().updateTransaction(transaction, HttpBody.create().add("delivered", true));
                 } else if (transaction.isRefunded() && !transaction.isProductRefunded()) {
+
                     PlayerRefundedProductEvent playerRefundedProductEvent = new PlayerRefundedProductEvent(account, product);
                     playerRefundedProductEvent.call();
 
+                    Core.getLogger().log("Jogador '%s'(%s) pediu estorno do produto '%s'", account.getUsername(), account.getUniqueId().toString(), product.getName());
+
                     if (!playerRefundedProductEvent.isCancelled()) {
-                        Core.getLogger().log("Jogador '%s'(%s) pediu estorno do produto '%s'", account.getUsername(), account.getUniqueId().toString(), product.getName());
 
                         for (String command : product.getCommandsIfRefunded()) {
                             command = command.replace("{playername}", account.getUsername());

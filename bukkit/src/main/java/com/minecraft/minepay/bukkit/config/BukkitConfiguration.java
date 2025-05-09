@@ -12,12 +12,10 @@ import java.io.FileWriter;
 @Getter
 public class BukkitConfiguration {
 
-    private final int fetchStoresTimer;
-
     private final boolean debug;
 
     public static BukkitConfiguration load(File file) {
-        BukkitConfiguration configuration = new BukkitConfiguration(6000, false);
+        BukkitConfiguration configuration = new BukkitConfiguration(false);
 
         try {
             if (file.exists()) {

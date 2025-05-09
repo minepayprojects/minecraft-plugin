@@ -1,8 +1,6 @@
 package com.minecraft.minepay.bukkit.menu.list;
 
-import com.minecraft.minepay.Core;
 import com.minecraft.minepay.bukkit.event.inventory.InventoryConfirmBuyMenuOpenEvent;
-import com.minecraft.minepay.bukkit.event.inventory.InventoryGatewayMenuOpenEvent;
 import com.minecraft.minepay.bukkit.menu.Menu;
 import com.minecraft.minepay.bukkit.util.Util;
 import com.minecraft.minepay.bukkit.util.item.ItemBuilder;
@@ -16,13 +14,9 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.data.type.Gate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class GatewayMenu extends Menu {

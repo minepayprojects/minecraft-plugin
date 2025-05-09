@@ -47,11 +47,7 @@ public class ProductsMenu extends Menu {
         List<ItemStack> items = new ArrayList<>();
 
         for (ProductData product : getCategoryData().getProducts()) {
-            ItemBuilder builder = new ItemBuilder(Util.findItemStackByMaterialName(product.getDisplay_ingame()))
-                    .name(ColorUtil.GREEN + product.getName())
-                    .lore(product.getDescription_ingame());
-
-            items.add(builder.build());
+            items.add(getProductItem(product).build());
         }
 
         if (items.isEmpty()) {

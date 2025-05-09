@@ -2,8 +2,10 @@ package com.minecraft.minepay.bukkit.menu;
 
 import com.minecraft.minepay.account.Account;
 import com.minecraft.minepay.bukkit.BukkitCore;
+import com.minecraft.minepay.bukkit.util.Util;
 import com.minecraft.minepay.bukkit.util.inventory.InventoryApi;
 import com.minecraft.minepay.bukkit.util.item.ItemBuilder;
+import com.minecraft.minepay.http.data.product.ProductData;
 import com.minecraft.minepay.util.color.ColorUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,15 @@ public abstract class Menu {
 
     public void setPaginate(int page, List<ItemStack> items) {
         setPaginate(page, items, false, null);
+    }
+
+    public ItemBuilder getProductItem(ProductData product) {
+        String stringBuilder = product.getDisplay_ingame() + "\n\n" +
+                ColorUtil.GRAY + "Preço: " + ColorUtil.WHITE + "R$" + product.getPrice();
+
+        return new ItemBuilder(Util.findItemStackByMaterialName(product.getDisplay_ingame()))
+                .name(ColorUtil.GREEN + product.getName())
+                .lore(stringBuilder);
     }
 
     public void setPaginate(int page, List<ItemStack> items, boolean inventoryOpened, Player player) {
